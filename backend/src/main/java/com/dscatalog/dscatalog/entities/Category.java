@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity // Define a classe como uma entidade 
-@Table(name =  "tb_category") //Define a tabela no banco de Dados
+@Table(name =  "tb_category") // Criae Define a tabela no banco de Dados
 public class Category  implements Serializable{
 
 	

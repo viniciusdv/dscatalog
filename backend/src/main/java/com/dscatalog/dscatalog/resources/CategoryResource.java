@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dscatalog.dscatalog.dto.CategoryDTO;
 import com.dscatalog.dscatalog.entities.Category;
 import com.dscatalog.dscatalog.services.CategoryService;
 
@@ -22,8 +23,8 @@ public class CategoryResource {
 	
      @GetMapping //  Cria metodo GET para retorno da Requsição
      
-	 public ResponseEntity<List<Category>>findAll(){
-	 List <Category> list = service.findAll(); // Cria a lista do Category , buscando todos os registros
+	 public ResponseEntity<List<CategoryDTO>>findAll(){
+	 List <CategoryDTO> list = service.findAll(); // Cria a lista do Category , buscando todos os registros
 	 return ResponseEntity.ok().body(list); // Retorna a lista em formato JSON , retorno a "lista"
 	
      }
