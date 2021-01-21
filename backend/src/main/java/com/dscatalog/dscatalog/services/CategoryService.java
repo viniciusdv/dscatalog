@@ -7,12 +7,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dscatalog.dscatalog.dto.CategoryDTO;
 import com.dscatalog.dscatalog.entities.Category;
 import com.dscatalog.dscatalog.repositories.CategoryRepository;
+import com.dscatalog.dscatalog.services.exeptions.DatabaseExcepetion;
 import com.dscatalog.dscatalog.services.exeptions.ResourcesNotFoundException;
 
 import javax.persistence.EntityNotFoundException;
@@ -71,11 +74,35 @@ public class CategoryService {
 	  catch(EntityNotFoundException e) {
 		  
 		 
-		  throw new ResourcesNotFoundException("Id não Encontrado : " +id);
+	   throw new ResourcesNotFoundException("Id não Encontrado : " +id);
 			
 			
 	}
        
 	}
+	
+	public void delete(Long id) {
+	
+	try { 
+		
+		
+	repository.deleteById(id); // Chama função  respository para deletar
+		
+	}
+	catch(EmptyResultDataAccessException e) { // Exception de ID não encontrado
+		
+	
+		throw new ResourcesNotFoundException("Id Não Encontrado  : " +id);
+		
+		
+	}
+	
+	catch(DataIntegrityViolationException e) { // Exception para não deixar deltar uma categoria que tem produtos
+		
+		
+		throw new DatabaseExcepetion("Integridade Violada");
+		
+	}
 
-}	
+	}
+}
