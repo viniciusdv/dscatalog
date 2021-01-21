@@ -1,8 +1,9 @@
 package com.dscatalog.dscatalog.services;
 
 import java.util.List;
+
+
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.dscatalog.dscatalog.dto.CategoryDTO;
 import com.dscatalog.dscatalog.entities.Category;
 import com.dscatalog.dscatalog.repositories.CategoryRepository;
-import com.dscatalog.dscatalog.services.exeptions.EntityNotFoundException;
+import com.dscatalog.dscatalog.services.exeptions.ResourcesNotFoundException;
+
+import javax.persistence.EntityNotFoundException;
+
 
 @Service // Registra a classe como mecanismo de injeção de dependencia automatico
-
 public class CategoryService {
 	
 	@Autowired // Cria Dependencia
@@ -35,7 +38,7 @@ public class CategoryService {
 	public CategoryDTO finById(Long id) {
 	
 		Optional<Category> obj = repository.findById(id);
-		Category entity = obj.orElseThrow(()-> new EntityNotFoundException("Erro ao consultar Dados !"));
+		Category entity = obj.orElseThrow(()-> new ResourcesNotFoundException("Erro ao consultar Dados !"));
 		return new CategoryDTO(entity);
 	}
 	
@@ -46,6 +49,33 @@ public class CategoryService {
 		entity.setName(dto.getName());
         entity =  repository.save(entity);
         return new CategoryDTO(entity);
-	}   
+	}
+	
+	@Transactional
+	public CategoryDTO update(Long id, CategoryDTO dto) {
+		
+        
+		
+       try{
+			
+			
+		
+		Category entity =  repository.getOne(id); // Usar get One para atualizar algum dado
+		entity.setName(dto.getName());
+		entity = repository.save(entity);
+		return new CategoryDTO(entity);
+		
+		
+	}
+	
+	  catch(EntityNotFoundException e) {
+		  
+		 
+		  throw new ResourcesNotFoundException("Id não Encontrado : " +id);
+			
+			
+	}
+       
+	}
 
 }	
