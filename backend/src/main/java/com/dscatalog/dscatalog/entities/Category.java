@@ -1,11 +1,15 @@
 package com.dscatalog.dscatalog.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 @Entity // Define a classe como uma entidade 
@@ -19,12 +23,46 @@ private static final long serialVersionUID = 1L;
 @GeneratedValue(strategy = GenerationType.IDENTITY) // Gera o Auto_Increment no ID
  private Long id;
  private String name;
+ 
+ @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") //  Armazena horario sem time-zone padrão (UTC)
+ private Instant createdAt;
+
+ 
+ @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") //  Armazena horario sem time-zone padrão (UTC)
+ private Instant updateAt;
 
  public Category() {
 	 
 	
 	 
  }
+ 
+ 
+
+public Instant getCreatedAt() {
+	return createdAt;
+}
+
+
+
+public Instant getUpdateAt() {
+	return updateAt;
+}
+
+
+@PrePersist // Sempre que tiver um insert  ele seta a variavel com o instante atual da inserção
+public  void prePersist() {
+	
+	createdAt = Instant.now();
+	
+	
+}
+
+@PreUpdate // Sempre que tiver um update ele define  a variavel Instant com  a hora da alteração
+public void preUpdate() {
+	
+	updateAt = Instant.now();	
+}
 
 public Category(Long id, String name) {
 	
