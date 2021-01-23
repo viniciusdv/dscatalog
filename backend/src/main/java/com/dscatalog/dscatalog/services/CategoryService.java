@@ -1,24 +1,23 @@
 package com.dscatalog.dscatalog.services;
 
 import java.util.List;
-
-
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.dscatalog.dscatalog.dto.CategoryDTO;
 import com.dscatalog.dscatalog.entities.Category;
 import com.dscatalog.dscatalog.repositories.CategoryRepository;
 import com.dscatalog.dscatalog.services.exeptions.DatabaseExcepetion;
 import com.dscatalog.dscatalog.services.exeptions.ResourcesNotFoundException;
-
-import javax.persistence.EntityNotFoundException;
 
 
 @Service // Registra a classe como mecanismo de injeção de dependencia automatico
@@ -29,9 +28,9 @@ public class CategoryService {
      
 	@Transactional(readOnly =  true) // Cria uma transação e melhora performace de dados
 	
-	public List<CategoryDTO> findAll(){ // Cria metodo do FindAll passando o DTO do Category
-	List<Category> list = repository.findAll();
-	return list.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList()); // Coverte a List Category em CategoryDTO
+	public Page<CategoryDTO> findAllPaged(PageRequest pageRequest){ // Cria metodo do FindAll passando o DTO do Category
+	Page<Category> list = repository.findAll(pageRequest);
+	return list.map(x -> new CategoryDTO(x)); // Coverte a List Category em CategoryDTO
    
    //Retorna FindAll
 
