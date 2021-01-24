@@ -43,10 +43,10 @@ public class Product implements Serializable {
 	private Instant date;
 	
 	//Mapeamento JPA , Chave estrengeira entre produto e categoria
-	@ManyToMany
-	@JoinTable( name = "tb_product_category" ,
-	joinColumns = @JoinColumn(name = "product_id"),
-	inverseJoinColumns = @JoinColumn(name = "category_id"))
+	@ManyToMany // Tipo de relacionamento entre as tabelas
+	@JoinTable( name = "tb_product_category" , // faz a uniao para tabela product_category
+	joinColumns = @JoinColumn(name = "product_id"), // junta a tabela product_id
+	inverseJoinColumns = @JoinColumn(name = "category_id")) // referenciando o id da categoria
 	Set<Category> categories = new HashSet<>();
 	
 	public Product() {
